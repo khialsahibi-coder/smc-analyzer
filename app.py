@@ -4,9 +4,19 @@ import base64
 from io import BytesIO
 from openai import OpenAI
 
-st.set_page_config(page_title="SMC Sahibi Trading Chart", page_icon="📊", layout="centered")
+# --- HIDE STREAMLIT BRANDING & MENUS ---
+st.set_page_config(
+    page_title="Khial's SMC AI", 
+    page_icon="📊", 
+    layout="centered",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
+)
 
-# --- CUSTOM DARK GREEN CSS ---
+# --- CUSTOM DARK GREEN CSS + AWESOME TITLE ---
 custom_css = """
 <style>
 /* Main app background */
@@ -20,8 +30,33 @@ custom_css = """
     background-color: #051c11; /* Even darker green */
 }
 
+/* Awesome Glowing Title */
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(90deg, #a3e6c4, #2ca36b, #a3e6c4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 15px rgba(44, 163, 107, 0.4);
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+/* Subtitle with name */
+.sub-title {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #a3e6c4;
+    margin-top: 5px;
+    margin-bottom: 25px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
 /* Make headers a light green for contrast */
-h1, h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6 {
     color: #a3e6c4 !important;
 }
 
@@ -37,23 +72,38 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #1f7a4d;
     color: white;
     border: 1px solid #2ca36b;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 .stButton>button:hover {
     background-color: #2ca36b;
     color: white;
+    box-shadow: 0px 0px 10px rgba(44, 163, 107, 0.6);
 }
 
 /* Selectbox styling */
 div[data-baseweb="select"] > div {
     background-color: #154a31;
     color: white;
+    border: 1px solid #2ca36b;
 }
+
+/* HIDE THE TOP HEADER (GitHub logo, Manage App, etc) */
+header {visibility: hidden;}
+[data-testid="stToolbar"] {visibility: hidden;}
+
+/* HIDE THE FOOTER AND HAMBURGER MENU */
+footer {visibility: hidden;}
+#MainMenu {visibility: hidden;}
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-st.title("📊 Sahibi SMC Chart Predictor")
-st.write("Upload a single chart, select the timeframe, and get an instant prediction.")
+# --- CUSTOM TITLE HTML ---
+st.markdown("""
+    <div class="main-title">📊 SMC ELITE PREDICTOR</div>
+    <div class="sub-title">Custom AI Trading Assistant by Khial Sahibi</div>
+""", unsafe_allow_html=True)
 
 # --- SECURE API KEY LOADING ---
 try:
@@ -118,7 +168,6 @@ if st.button("🚀 ANALYZE CHART", use_container_width=True, type="primary"):
                 )
                 
                 st.success("Analysis Complete!")
-                # Using markdown so the text formats nicely on the dark background
                 st.markdown(f"### 📝 Trade Plan\n{response.choices[0].message.content}")
                 
             except Exception as e:
